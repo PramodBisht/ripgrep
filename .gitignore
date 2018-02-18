@@ -15,3 +15,6 @@ parts
 *.snap
 *.pyc
 ripgrep*_source.tar.bz2
+
+# IDE specific files
+.idea/*
