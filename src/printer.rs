@@ -555,7 +555,7 @@ impl fmt::Display for Error {
             }
             Error::UnrecognizedStyle(ref name) => {
                 write!(f, "Unrecognized style attribute '{}'. Choose from: \
-                           nobold, bold, nointense, intense.", name)
+                           nobold, bold, nointense, intense, underline.", name)
             }
             Error::InvalidFormat(ref original) => {
                 write!(
@@ -668,6 +668,7 @@ enum Style {
     NoBold,
     Intense,
     NoIntense,
+    Underline,
 }
 
 impl ColorSpecs {
@@ -727,6 +728,7 @@ impl SpecValue {
                     Style::NoBold => { cspec.set_bold(false); }
                     Style::Intense => { cspec.set_intense(true); }
                     Style::NoIntense => { cspec.set_intense(false); }
+                    Style::Underline => { cspec.set_underline(true); }
                 }
             }
         }
@@ -806,6 +808,7 @@ impl FromStr for Style {
             "nobold" => Ok(Style::NoBold),
             "intense" => Ok(Style::Intense),
             "nointense" => Ok(Style::NoIntense),
+            "underline" => Ok(Style::Underline),
             _ => Err(Error::UnrecognizedStyle(s.to_string())),
         }
     }
@@ -851,6 +854,12 @@ mod tests {
         assert_eq!(spec, Spec {
             ty: OutType::Match,
             value: SpecValue::Style(Style::Bold),
+        });
+
+        let spec: Spec = "match:style:underline".parse().unwrap();
+        assert_eq!(spec, Spec {
+            ty: OutType::Match,
+            value: SpecValue::Style(Style::Underline),
         });
 
         let spec: Spec = "match:style:intense".parse().unwrap();
